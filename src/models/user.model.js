@@ -51,5 +51,35 @@ const userSchema = new Schema({
 },{
     timestamps: true,
 });
+userSchema.pre("Save",async function (next) {
+    if(!this.isModified("password")) return next();
+    this.password = bcrypt.hash(this.password,10);
+    next();
+} )
+userSchema.methods.isPasswordCorrect = async function (password) {
+    return await bcrypt.compare(password,this.password);
+}
+userSchema.methods.generateAccessToken = function () {
+    return jwt.sign({
+        _id: this._id,
+        username: this.username,
+        email: this.email,
+        fullname: this.fullname,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m',}
+    )
+}
+userSchema.methods.generateRefershToken = function () {
+     return jwt.sign({
+        _id: this._id,
+
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+        expiresIn: process.env.generateRefershToken_TOKEN_EXPIRY || '15m',}
+    )
+}
 
 export const User = mongoose.model("User", userSchema);
