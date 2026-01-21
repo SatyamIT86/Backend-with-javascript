@@ -68,7 +68,7 @@ userSchema.methods.generateAccessToken = function () {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m',}
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRY}
     )
 }
 userSchema.methods.generateRefershToken = function () {
@@ -76,9 +76,9 @@ userSchema.methods.generateRefershToken = function () {
         _id: this._id,
 
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.REFRESH_TOKEN_SECRET,
     {
-        expiresIn: process.env.generateRefershToken_TOKEN_EXPIRY || '15m',}
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRY}
     )
 }
 
